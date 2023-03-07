@@ -75,6 +75,11 @@ class Center extends Model implements FromCollection, WithHeadings, WithStyles
         return $this->deleted_at == null ? 'success' : 'danger';
     }
 
+    // Scopes
+    public function scopeActive ($query) {
+        return $query->where('status', 'active');
+    }
+
     // Relations
     public function branch()
     {

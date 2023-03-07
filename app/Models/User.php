@@ -134,6 +134,23 @@ class User extends Authenticatable implements FromCollection, WithHeadings, With
         return $query->where('position', 'admin');
     }
 
+    public function scopeKeeper ($query) {
+        return $query->where('position', 'keeper');
+    }
+
+    public function scopeActiveKeeper ($query) {
+        return $query->keeper()->where('status', 'active');
+    }
+
+    public function scopeKeeperWithoutGroup ($query) {
+        return $query->activeKeeper()->whereDoesntHave('group');
+    }
+
+    public function scopeKeeperOwnWithoutGroup ($query) {
+        return $query->activeKeeper()->whereDoesntHave('group', function ($query) {
+            return $query->where('id', '=', $this->id);
+        });
+    }
 
 
     // Relations

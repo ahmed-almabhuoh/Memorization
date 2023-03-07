@@ -233,7 +233,7 @@ class BranchController extends Controller
         } else {
             $success_MSG = $user->id === $branch->supervisor_id ? $user->full_name . ' removed sucessfullt from' . $branch->name . ' branch.' : $user->full_name . ' added sucessfullt as a CEO to ' . $branch->name . ' branch.';
 
-            $branch->supervisor_id = $user->id === $branch->supervisor_id ? null : $supervisor->id;
+            $branch->supervisor_id = $user->id === $branch->supervisor_id ? null : $user->id;
             $isAdded = $branch->save();
 
             return response()->json([
