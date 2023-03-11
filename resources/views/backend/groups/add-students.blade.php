@@ -1,10 +1,10 @@
 @extends('layouts.admin')
 
-@section('title', 'All CEO to {{ $branch->name }} branch')
+@section('title', 'All CEO to ' .  $group->name . ' group')
 
 @section('styles')
     <style>
-        #supervisor-image {
+        #student-image {
             width: 50px;
             height: 50px;
             border-radius: 50%;
@@ -16,28 +16,28 @@
 @endsection
 
 @section('content')
-    {{-- {{ dd($supervisors) }} --}}
     <div class="card card-custom">
         <div class="card-header flex-wrap border-0 pt-6 pb-0">
             <div class="card-title">
-                <h3 class="card-label">{{ $branch->name }} branch
-                    <span class="text-muted pt-2 font-size-sm d-block">Add CEO to {{ $branch->name }}
-                        branch</span>
+                <h3 class="card-label">{{ $group->name }} group
+                    <span class="text-muted pt-2 font-size-sm d-block">Add CEO to {{ $group->name }}
+                        group</span>
                 </h3>
             </div>
         </div>
 
-        @livewire('add-ceo-to-branch-livewire', [
-            'branch' => $branch,
-            'supervisors' => $supervisors,
+        @livewire('add-student-to-group-livewire', [
+            'group' => $group,
+            'students' => $students,
+            'group_students' => $group_students,
         ])
     </div>
 @endsection
 
 @section('scripts')
     <script>
-        function add(id, s_id) {
-            axios.post('/auto/supervisor-to-branch/' + id + '/supervisor/' + s_id)
+        function add(id, student_id) {
+            axios.post('/auto/student-to-group/' + id + '/student/' + student_id)
                 .then(function(response) {
                     // handle success
                     // showDeletingMessage(response.data);

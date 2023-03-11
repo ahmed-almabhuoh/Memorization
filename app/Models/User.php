@@ -152,6 +152,10 @@ class User extends Authenticatable implements FromCollection, WithHeadings, With
         });
     }
 
+    public function scopeStudents ($query) {
+        return $query->where('position', '=', 'student');
+    }
+
 
     // Relations
     public function blocks()
@@ -171,7 +175,7 @@ class User extends Authenticatable implements FromCollection, WithHeadings, With
 
     public function groups()
     {
-        return $this->belongsToMany(Group::class, 'group_student');
+        return $this->belongsToMany(Group::class, 'group_student', 'group_id', 'student_id');
     }
 
     public function sc()

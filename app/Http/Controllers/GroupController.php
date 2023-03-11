@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Center;
 use App\Models\Group;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -188,10 +190,57 @@ class GroupController extends Controller
     }
 
     // Get manager report
-    public function getReportSpecificBranch($id)
+    public function getReportSpecificGroup($id)
     {
-        // $manager = Manager::findOrFail(Crypt::decrypt($id));
-        // $manager = Manager::find(Crypt::decrypt($id));
-        return Excel::download(new Group(Crypt::decrypt($id)), 'manager.xlsx');
+        return Excel::download(new Group(Crypt::decrypt($id)), 'group.xlsx');
+    }
+
+    // View all students
+    public function viewAddStudent ($group_id) {
+        $group = Group::where('id', Crypt::decrypt($group_id))->first();
+
+        return \response()->view('backend.groups.add-students', [
+            'group' =>  $group,
+            'group_students' =>  $group->students,
+            'students' =>  User::students()->get(),
+        ]);
+    }
+
+//    Add Student To Group
+    public function addStudentrToGroup ($group_id, $student_id) {
+        $group  = Group::where('id', Crypt::decrypt($group_id))->first();
+        $student  = User::students()->where('id', Crypt::decrypt($student_id))->first();
+
+        /* Check Avilability*/
+        if (is_null($group) || is_null($student)) {
+            return \response()->json([
+                'message' => 'Wrong URL, please try again!',
+            ], Response::HTTP_BAD_REQUEST);
+        }else {
+            if (!DB::table('group_student')->where([
+                ['student_id', '=', $student->id],
+                ['group_id', '=', $group->id],
+            ])->exists()) {
+                DB::table('group_student')->insert([
+                    'student_id' => $student->id,
+                    'group_id' => $group->id,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ]);
+
+                return \response()->json([
+                    'message'=> 'Student ' . $student->fname . ' add successfully to the ' . $group->name . ' group.',
+                ], Response::HTTP_CREATED);
+            }else {
+                DB::table('group_student')->where([
+                    ['student_id', '=', $student->id],
+                    ['group_id', '=', $group->id],
+                ])->delete();
+
+                return \response()->json([
+                    'message'=> 'Student ' . $student->fname . ' removed successfully from ' . $group->name . ' group.',
+                ], Response::HTTP_OK);
+            }
+        }
     }
 }

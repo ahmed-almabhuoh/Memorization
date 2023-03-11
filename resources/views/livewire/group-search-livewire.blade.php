@@ -82,15 +82,15 @@
                         <td data-field="ShipDate" aria-label="8/27/2017" class="datatable-cell"><span
                                 style="width: 121px;">{{ $group->region }}</span></td>
                         <td data-field="Status" aria-label="6" class="datatable-cell"><span style="width: 121px;"><span
-                                    class="{{ $group->branch_status_class }}">{{ ucfirst($group->status) }}</span></span>
+                                    class="{{ $group->group_status_class }}">{{ ucfirst($group->status) }}</span></span>
                         </td>
 
                         <td data-field="Type" data-autohide-disabled="false" aria-label="2" class="datatable-cell">
                             <span style="width: 121px;"><span
-                                    class="label label-{{ $group->branch_deletion_class }} label-dot mr-2">
+                                    class="label label-{{ $group->group_deletion_class }} label-dot mr-2">
                                 </span>
                                 <span
-                                    class="font-weight-bold text-{{ $group->branch_deletion_class }}">{{ $group->branch_deletion }}</span>
+                                    class="font-weight-bold text-{{ $group->group_deletion_class }}">{{ $group->group_deletion }}</span>
                             </span>
                         </td>
 
@@ -118,10 +118,10 @@
                                                 class="navi-header font-weight-bolder text-uppercase font-size-xs text-primary pb-2">
                                                 Choose an action: </li>
                                             <li class="navi-item"> <a
-                                                    href="#"
+                                                    href="{{route('students.to.group', Crypt::encrypt($group->id))}}"
                                                     class="navi-link"> <span class="navi-icon"><i
                                                             class="la la-print"></i></span> <span
-                                                        class="navi-text">CEOs</span> </a> </li>
+                                                        class="navi-text">Students</span> </a> </li>
                                             <li class="navi-item"> <a href="#" class="navi-link"> <span
                                                         class="navi-icon"><i class="la la-copy"></i></span> <span
                                                         class="navi-text">Copy</span> </a> </li>
