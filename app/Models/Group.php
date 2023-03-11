@@ -90,4 +90,8 @@ class Group extends Model implements FromCollection, WithHeadings, WithStyles
     {
         return $this->belongsToMany(User::class, 'group_student', 'group_id', 'student_id');
     }
+
+    public function keeps () {
+        return $this->hasMany(Keeps::class);
+    }
 }

@@ -70,6 +70,16 @@ Route::prefix('/')->middleware(['auth:web', 'activation', 'soft_deleted'])
             Route::get('/blockes/{blocked_id}/{guard?}', [\App\Http\Controllers\BlockController::class, 'show'])->name('user.blocks');
             Route::post('block/{blocked_id}/{guard}', [\App\Http\Controllers\BlockController::class, 'store'])->name('blocks.store');
 
+
+            /*
+             * All related keeps route
+             * */
+            Route::prefix('keeps')->group(function () {
+                Route::get('{student_id}/group/{group_id}', [\App\Http\Controllers\KeepsController::class, 'index'])->name('keeps.index');
+                Route::get('create/{student_id}/group/{group_id}', [\App\Http\Controllers\KeepsController::class, 'create'])->name('keeps.create');
+                Route::post('store', [\App\Http\Controllers\KeepsController::class, 'store'])->name('keeps.store');
+            });
+
             Route::get('/logout', [\App\Http\Controllers\AuthenticationController::class, 'logout'])->name('logout')->withoutMiddleware(['activation', 'soft_deleted']);
         });
     });
