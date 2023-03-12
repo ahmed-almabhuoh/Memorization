@@ -4,6 +4,7 @@ namespace App\Http;
 
 use App\Http\Middleware\Activation;
 use App\Http\Middleware\DenyDeleted;
+use App\Http\Middleware\Student;
 use App\Http\Middleware\VerifyApiKey;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -69,5 +70,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'activation' => Activation::class,
         'soft_deleted' => DenyDeleted::class,
+        'student-parent-api' => Student::class,
     ];
 }

@@ -25,6 +25,12 @@ Route::prefix('auto')->group(function () {
 
 Route::prefix('auto')->middleware('auth:sanctum')->group(function () {
 
+    Route::get('/test', function () {
+        return response()->json([
+            'message' => 'Here'
+        ]);
+    })->middleware('parent-api');
+
     // Resources
     Route::prefix('/')->group(function () {
         Route::resource('admins', \App\Http\Controllers\api\AdminController::class);
@@ -44,7 +50,31 @@ Route::prefix('auto')->middleware('auth:sanctum')->group(function () {
         Route::get('admins-search/{search?}', [\App\Http\Controllers\api\BlocksController::class, 'searchForAdminBlocks']);
     });
 
+    /*
+     * Student & Parent
+     * */
+    Route::prefix('/')->middleware(['student-parent-api'])->group(function () {
+
+        /*
+         * Account Route Groups
+         * */
+        Route::prefix('account')->group(function () {
+            Route::get('/', [\App\Http\Controllers\api\AccountController::class, 'getAccoountInformation']);
+            Route::put('/update', [\App\Http\Controllers\api\AccountController::class, 'update']);
+            Route::put('/change-password', [\App\Http\Controllers\api\AccountController::class, 'changePassword']);
+        });
+
+        /*
+         * Keeps API
+         * */
+        Route::prefix('keep')->group(function () {
+            Route::get('/', [\App\Http\Controllers\api\KeepsController::class, 'index']);
+        });
+    });
+
     // Log out
     Route::get('logout', [\App\Http\Controllers\api\AuthenticationController::class, 'logout']);
 });
+
+
 
