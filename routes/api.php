@@ -56,7 +56,7 @@ Route::prefix('auto')->middleware('auth:sanctum')->group(function () {
     Route::prefix('/')->middleware(['student-parent-api'])->group(function () {
 
         /*
-         * Account Route Groups
+         * Account Routes
          * */
         Route::prefix('account')->group(function () {
             Route::get('/', [\App\Http\Controllers\api\AccountController::class, 'getAccoountInformation']);
@@ -69,6 +69,13 @@ Route::prefix('auto')->middleware('auth:sanctum')->group(function () {
          * */
         Route::prefix('keep')->group(function () {
             Route::get('/', [\App\Http\Controllers\api\KeepsController::class, 'index']);
+        });
+    });
+
+    Route::prefix('keepers')->middleware(['keeper-api'])->group(function () {
+        Route::prefix('groups')->group(function () {
+            Route::get('/', [\App\Http\Controllers\api\keepers\KeeperGroupController::class, 'getGroups']);
+            Route::get('/students/{group_id?}', [\App\Http\Controllers\api\keepers\KeeperGroupController::class, 'getGroupStudents']);
         });
     });
 

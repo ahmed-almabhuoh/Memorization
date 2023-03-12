@@ -75,6 +75,13 @@ class Group extends Model implements FromCollection, WithHeadings, WithStyles
         return $this->deleted_at == null ? 'success' : 'danger';
     }
 
+    // Scopes
+    public function scopeKeeper ($query, $keeper_id) {
+        return $query->whereHas('keeper', function ($query) use ($keeper_id) {
+            $query->where('id', $keeper_id);
+        });
+    }
+
     // Relations
     public function center()
     {
