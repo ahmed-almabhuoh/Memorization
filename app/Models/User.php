@@ -154,6 +154,10 @@ class User extends Authenticatable implements FromCollection, WithHeadings, With
         return $query->where('position', '=', 'student');
     }
 
+    public function scopeSupervisors ($query) {
+        return $query->where('position', '=', 'supervisor');
+    }
+
 
     // Relations
     public function blocks()

@@ -51,6 +51,17 @@ Route::prefix('auto')->middleware('auth:sanctum')->group(function () {
     });
 
     /*
+     * Supervisors
+     * */
+    Route::prefix('supervisors')->group(function () {
+        Route::get('/', [\App\Http\Controllers\api\Supervisors\SupervisorController::class, 'index']);
+        Route::get('/{supervisor_id}', [\App\Http\Controllers\api\Supervisors\SupervisorController::class, 'show']);
+        Route::post('create', [\App\Http\Controllers\api\Supervisors\SupervisorController::class, 'store']);
+        Route::put('/{supervisor_id}', [\App\Http\Controllers\api\Supervisors\SupervisorController::class, 'update']);
+        Route::delete('/{supervisor_id}', [\App\Http\Controllers\api\Supervisors\SupervisorController::class, 'destroy']);
+    });
+
+    /*
      * Student & Parent
      * */
     Route::prefix('/')->middleware(['student-parent-api'])->group(function () {
