@@ -91,6 +91,31 @@ Route::prefix('auto')->middleware('auth:sanctum')->group(function () {
      * */
     Route::prefix('/')->middleware(['student-parent-api'])->group(function () {
 
+
+        /*
+         * Parents
+         * */
+        Route::prefix('/parents')->withoutMiddleware(['student-parent-api'])->group(function () {
+            Route::get('/', [\App\Http\Controllers\api\parents\ParentController::class, 'index']);
+            Route::get('/{parent_id}', [\App\Http\Controllers\api\parents\ParentController::class, 'show']);
+            Route::post('/create', [\App\Http\Controllers\api\parents\ParentController::class, 'store']);
+            Route::put('/{parent_id}', [\App\Http\Controllers\api\parents\ParentController::class, 'update']);
+            Route::delete('/{parent_id}', [\App\Http\Controllers\api\parents\ParentController::class, 'destroy']);
+        });
+
+
+        /*
+         * Students
+         * */
+        Route::prefix('/students')->withoutMiddleware(['student-parent-api'])->group(function () {
+            Route::get('/', [\App\Http\Controllers\api\students\StudentController::class, 'index']);
+            Route::get('/{student_id}', [\App\Http\Controllers\api\students\StudentController::class, 'show']);
+            Route::post('/create', [\App\Http\Controllers\api\students\StudentController::class, 'store']);
+            Route::put('/{student_id}', [\App\Http\Controllers\api\students\StudentController::class, 'update']);
+            Route::delete('/{student_id}', [\App\Http\Controllers\api\students\StudentController::class, 'destroy']);
+        });
+
+
         /*
          * Account Routes
          * */
@@ -116,7 +141,6 @@ Route::prefix('auto')->middleware('auth:sanctum')->group(function () {
             });
         });
     });
-
 
 
     // Log out
