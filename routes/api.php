@@ -62,6 +62,31 @@ Route::prefix('auto')->middleware('auth:sanctum')->group(function () {
     });
 
     /*
+     * Keepers
+     * */
+    Route::prefix('keepers')->middleware(['keeper-api'])->group(function () {
+        /*
+         * Keeper CRUD
+         * */
+        Route::prefix('/')->withoutMiddleware(['keeper-api'])->group(function () {
+            Route::get('/', [\App\Http\Controllers\api\keepers\KeeperController::class, 'index']);
+            Route::get('/{keeper_id}', [\App\Http\Controllers\api\keepers\KeeperController::class, 'show']);
+            Route::post('/create', [\App\Http\Controllers\api\keepers\KeeperController::class, 'store']);
+            Route::put('/{keeper_id}', [\App\Http\Controllers\api\keepers\KeeperController::class, 'update']);
+            Route::delete('/{keeper_id}', [\App\Http\Controllers\api\keepers\KeeperController::class, 'destroy']);
+        });
+
+
+        /*
+         * Keeper Groups
+         * */
+        Route::prefix('groups')->group(function () {
+            Route::get('/', [\App\Http\Controllers\api\keepers\KeeperGroupController::class, 'getGroups']);
+            Route::get('/students/{group_id?}', [\App\Http\Controllers\api\keepers\KeeperGroupController::class, 'getGroupStudents']);
+        });
+    });
+
+    /*
      * Student & Parent
      * */
     Route::prefix('/')->middleware(['student-parent-api'])->group(function () {
@@ -92,12 +117,7 @@ Route::prefix('auto')->middleware('auth:sanctum')->group(function () {
         });
     });
 
-    Route::prefix('keepers')->middleware(['keeper-api'])->group(function () {
-        Route::prefix('groups')->group(function () {
-            Route::get('/', [\App\Http\Controllers\api\keepers\KeeperGroupController::class, 'getGroups']);
-            Route::get('/students/{group_id?}', [\App\Http\Controllers\api\keepers\KeeperGroupController::class, 'getGroupStudents']);
-        });
-    });
+
 
     // Log out
     Route::get('logout', [\App\Http\Controllers\api\AuthenticationController::class, 'logout']);
