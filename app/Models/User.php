@@ -88,8 +88,6 @@ class User extends Authenticatable implements FromCollection, WithHeadings, With
 
 
 
-
-
     // Get - Attributes
     public function getFullNameAttribute()
     {

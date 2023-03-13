@@ -123,6 +123,7 @@
 
         @livewire('keeps.keeps-search-livewire', [
             'student' => $student,
+            'group' => $group,
             'keeps' => $keeps,
         ])
     </div>

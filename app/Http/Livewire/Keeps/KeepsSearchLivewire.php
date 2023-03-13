@@ -9,10 +9,12 @@ class KeepsSearchLivewire extends Component
 {
     protected $keeps;
     public $student;
+    public $group;
 
-    public  function mount ($student, $keeps) {
+    public  function mount ($student, $group, $keeps) {
         $this->keeps = $keeps;
         $this->student = $student;
+        $this->group = $group;
     }
 
     public function render()

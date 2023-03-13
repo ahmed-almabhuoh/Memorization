@@ -69,6 +69,15 @@ Route::prefix('auto')->middleware('auth:sanctum')->group(function () {
          * */
         Route::prefix('keep')->group(function () {
             Route::get('/', [\App\Http\Controllers\api\KeepsController::class, 'index']);
+
+
+            /*
+             * Avilable also to keeper
+             * */
+            Route::prefix('/')->withoutMiddleware(['student-parent-api'])->group(function () {
+                Route::post('/create/student/{student_id}', [\App\Http\Controllers\api\KeepsController::class, 'setKeep']);
+                Route::get('juz/{juz_id?}', [\App\Http\Controllers\api\KeepsController::class, 'loadQuranResources']);
+            });
         });
     });
 

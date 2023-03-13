@@ -32,11 +32,11 @@ class CreateLivewire extends Component
              * */
             $str = json_decode(file_get_contents(storage_path($fullFilePath)));
             if (!$str) {
-                $this->juzs_response = Http::get('http://api.alquran.cloud/v1/juz/' . $this->selectedStartJuz . '/en.asad');
+                $this->juzs_response = Http::get('http://api.alquran.cloud/v1/juz/' . $this->selectedStartJuz . '/ar.asad');
                 file_put_contents(storage_path($fullFilePath), $this->juzs_response);
             }
         } else {
-            $this->juzs_response = Http::get('http://api.alquran.cloud/v1/juz/' . $this->selectedStartJuz . '/en.asad');
+            $this->juzs_response = Http::get('http://api.alquran.cloud/v1/juz/' . $this->selectedStartJuz . '/ar.asad');
             file_put_contents(storage_path($fullFilePath), $this->juzs_response);
         }
 
@@ -73,7 +73,7 @@ class CreateLivewire extends Component
                 file_put_contents(storage_path($fullFilePath), $this->juzs_response);
             }
         } else {
-            $this->juzs_response = Http::get('http://api.alquran.cloud/v1/juz/' . $this->selectedStartJuz . '/en.asad');
+            $this->juzs_response = Http::get('http://api.alquran.cloud/v1/juz/' . $this->selectedStartJuz . '/ar.asad');
             file_put_contents(storage_path($fullFilePath), $this->juzs_response);
         }
 

@@ -36,7 +36,7 @@
                 <th data-field="CompanyName" class="datatable-cell datatable-cell-sort"><span
                         style="width: 121px;">Identity No.</span></th>
                 <th data-field="CompanyName" class="datatable-cell datatable-cell-sort"><span
-                        style="width: 121px;">Keeps</span></th>
+                        style="width: 121px;">Phone</span></th>
                 <th data-field="Actions" data-autohide-disabled="false" class="datatable-cell datatable-cell-sort">
                     <span style="width: 125px;">Actions</span>
                 </th>
@@ -68,14 +68,8 @@
                     <td data-field="ShipDate" aria-label="8/27/2017" class="datatable-cell"><span
                             style="width: 121px;">{{ $student->identity_no }}</span></td>
 
-                    <td data-field="ShipDate" aria-label="8/27/2017" class="datatable-cell"><span style="width: 121px;">
-                                <a href="{{route('keeps.index', [
-                                            'student_id' => \Illuminate\Support\Facades\Crypt::encrypt($student->id),
-                                        'group_id' => \Illuminate\Support\Facades\Crypt::encrypt($group->id)])}}"
-                                   class="btn btn-outline-primary">Keeps - {{ count($student->keeps) }}</a>
-                            </span>
-                    </td>
-
+                    <td data-field="ShipDate" aria-label="8/27/2017" class="datatable-cell"><span
+                            style="width: 121px;">{{ $student->phone }}</span></td>
 
                     <td data-field="Actions" data-autohide-disabled="false" aria-label="null"
                         class="datatable-cell"><span style="overflow: visible; position: relative; width: 125px;">

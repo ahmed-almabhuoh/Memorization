@@ -109,10 +109,13 @@
                     <td data-field="Actions" data-autohide-disabled="false" aria-label="null"
                         class="datatable-cell"><span style="overflow: visible; position: relative; width: 125px;">
                                 <div class="dropdown dropdown-inline"> <a href="javascript:;"
-                                                                          class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="dropdown"> <span
+                                                                          class="btn btn-sm btn-clean btn-icon mr-2"
+                                                                          data-toggle="dropdown"> <span
                                             class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg"
-                                                                               xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                                                                               height="24px" viewBox="0 0 24 24" version="1.1">
+                                                                               xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                               width="24px"
+                                                                               height="24px" viewBox="0 0 24 24"
+                                                                               version="1.1">
                                                 <g stroke="none" stroke-width="1" fill="none"
                                                    fill-rule="evenodd">
                                                     <rect x="0" y="0" width="24"
@@ -153,10 +156,14 @@
                                                     <span class="navi-text">PDF</span> </a> </li>
                                         </ul>
                                     </div>
-                                </div> <a href="{{ route('keeps.edit', Crypt::encrypt($keep->id)) }}"
+                                </div> <a href="{{ route('keeps.index', [
+    'student_id' => \Illuminate\Support\Facades\Crypt::encrypt($student->id),
+    'group_id' => \Illuminate\Support\Facades\Crypt::encrypt($group->id),
+]) }}"
                                           class="btn btn-sm btn-clean btn-icon mr-2" title="Edit details"> <span
                                     class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg"
-                                                                       xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+                                                                       xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                       width="24px" height="24px"
                                                                        viewBox="0 0 24 24" version="1.1">
                                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                 <rect x="0" y="0" width="24" height="24">
@@ -172,9 +179,11 @@
                                             </g>
                                         </svg> </span> </a> <button type="button"
                                                                     onclick="confirmDestroy('{{ \Illuminate\Support\Facades\Crypt::encrypt($keep->id) }}', this)"
-                                                                    class="btn btn-sm btn-clean btn-icon" title="Delete"> <span
+                                                                    class="btn btn-sm btn-clean btn-icon"
+                                                                    title="Delete"> <span
                                     class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg"
-                                                                       xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+                                                                       xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                       width="24px" height="24px"
                                                                        viewBox="0 0 24 24" version="1.1">
                                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                 <rect x="0" y="0" width="24" height="24">
@@ -250,19 +259,20 @@
                                                         <div class="form-group mb-1">
                                                             <label for="block_description">Block
                                                                 description</label>
-                                                            <textarea class="form-control" id="block_description" rows="5"></textarea>
+                                                            <textarea class="form-control" id="block_description"
+                                                                      rows="5"></textarea>
                                                         </div>
 
                                                         <div class="form-group mb-1">
                                                             <label for="from_date">Block from</label>
                                                             <input class="form-control" type="datetime-local"
-                                                                   value="2011-08-19T13:45:00" id="from_date" />
+                                                                   value="2011-08-19T13:45:00" id="from_date"/>
                                                         </div>
 
                                                         <div class="form-group mb-1">
                                                             <label for="to_date">Block to</label>
                                                             <input class="form-control" type="datetime-local"
-                                                                   value="2011-08-19T13:45:00" id="to_date" />
+                                                                   value="2011-08-19T13:45:00" id="to_date"/>
                                                         </div>
                                                     </form>
 
@@ -279,10 +289,12 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-light-primary font-weight-bold"
-                                                data-dismiss="modal">Close</button>
+                                                data-dismiss="modal">Close
+                                        </button>
                                         <button type="button" onclick="blockKeep('keep')"
                                                 class="btn btn-primary font-weight-bold">Save
-                                            changes</button>
+                                            changes
+                                        </button>
                                     </div>
                                 </div>
                             </div>
