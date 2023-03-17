@@ -199,7 +199,7 @@ class BranchController extends Controller
     }
 
     // Assign CEO For Branch
-    public function showAddUser($branch_id)
+    public function showAddSupverisors($branch_id)
     {
         $branch = Branch::findOrFail(Crypt::decrypt($branch_id));
 
@@ -215,7 +215,7 @@ class BranchController extends Controller
     }
 
     // Add CEO To Branch
-    public function addUserToBranch($branch_id, $s_id)
+    public function addSupervisorToBranch($branch_id, $s_id)
     {
         $branch = Branch::find(Crypt::decrypt($branch_id));
         $user = User::find(Crypt::decrypt($s_id));
