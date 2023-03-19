@@ -33,6 +33,7 @@ Route::prefix('/')->middleware(['auth:web', 'activation', 'soft_deleted'])
             Route::resource('apis', \App\Http\Controllers\APIKEYController::class);
             Route::resource('supervision_committees', \App\Http\Controllers\SupervisionCommitteeController::class);
             Route::resource('groups', \App\Http\Controllers\GroupController::class);
+            Route::resource('tests', \App\Http\Controllers\TestController::class);
             Route::resource('reports', \App\Http\Controllers\ReportController::class);
         });
 
@@ -50,8 +51,10 @@ Route::prefix('/')->middleware(['auth:web', 'activation', 'soft_deleted'])
             Route::get('/branch/excel/report/{id}', [\App\Http\Controllers\BranchController::class, 'getReportSpecificBranch'])->name('branch.report.xlsx');
             Route::get('/group/excel/report', [\App\Http\Controllers\GroupController::class, 'getReport'])->name('groups.report.xlsx');
             Route::get('/group/excel/report/{id}', [\App\Http\Controllers\GroupController::class, 'getReportSpecificGroup'])->name('group.report.xlsx');
+            Route::get('/test/excel/report', [\App\Http\Controllers\GroupController::class, 'getReport'])->name('tests.report.xlsx');
+            Route::get('/test/excel/report/{id}', [\App\Http\Controllers\GroupController::class, 'getReportSpecificTest'])->name('test.report.xlsx');
             Route::get('/report/excel/report', [\App\Http\Controllers\GroupController::class, 'getReport'])->name('reports.report.xlsx');
-            Route::get('/report/excel/report/{id}', [\App\Http\Controllers\GroupController::class, 'getReportSpecificGroup'])->name('report.report.xlsx');
+            Route::get('/report/excel/report/{id}', [\App\Http\Controllers\GroupController::class, 'getReportSpecificReport'])->name('report.report.xlsx');
 
             Route::get('/user/excel/report', [\App\Http\Controllers\UserController::class, 'getReport'])->name('users.report.xlsx');
             Route::get('/user/excel/report/{id}', [\App\Http\Controllers\UserController::class, 'getReportSpecificUser'])->name('user.report.xlsx');

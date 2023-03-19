@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Events\CreateBlockUserEvent;
+use App\Jobs\SendWelcomeEmailJob;
 use App\Models\Block;
 use App\Models\User;
+use App\Notifications\WelcomeEmailNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\Rules\Password;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -103,6 +106,8 @@ class AdminController extends Controller
             }
             $user->image = $image_path;
             $isCreated = $user->save();
+
+            dispatch(new SendWelcomeEmailJob($user));
 
             event(new CreateBlockUserEvent($request, $user));
 
