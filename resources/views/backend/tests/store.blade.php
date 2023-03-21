@@ -94,8 +94,12 @@
 
             axios.post('/auto/tests', formData)
                 .then(function (response) {
-                    toastr.success(response.data.message);
-                    document.getElementById('creation-form').reset();
+                    toastr.info(response.data.message);
+                    // document.getElementById('creation-form').reset();
+                    // window.location.href = '/auto/tests/' + response.data.test.id;
+                    setTimeout(function () {
+                        window.location.href = '/auto/tests/' + response.data.test.id;
+                    }, 6000); // 6 seconds delay
                 })
                 .catch(function (error) {
                     toastr.error(error.response.data.message);

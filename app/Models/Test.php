@@ -54,4 +54,8 @@ class Test extends Model
     {
         return $this->belongsTo(User::class, 'sc_id', 'id');
     }
+
+    public function questions () {
+        return $this->hasMany(Question::class, 'test_id', 'id');
+    }
 }

@@ -76,6 +76,14 @@ Route::prefix('/')->middleware(['auth:web', 'activation', 'soft_deleted'])
             Route::get('/blockes/{blocked_id}/{guard?}', [\App\Http\Controllers\BlockController::class, 'show'])->name('user.blocks');
             Route::post('block/{blocked_id}/{guard}', [\App\Http\Controllers\BlockController::class, 'store'])->name('blocks.store');
 
+            /*
+             * Tests routes
+             * */
+            Route::prefix('mark')->group(function () {
+                Route::get('view/{test_id}', [\App\Http\Controllers\TestController::class, 'getMarkView'])->name('test.marks.view');
+                Route::post('submit', [\App\Http\Controllers\TestController::class, 'storeQuestionMark'])->name('test.store.marks');
+            });
+
 
             /*
              * All related keeps route

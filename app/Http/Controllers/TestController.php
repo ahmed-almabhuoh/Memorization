@@ -9,6 +9,8 @@ use App\Rules\StudentBelongsToKeeper;
 use Dotenv\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
@@ -70,18 +72,26 @@ class TestController extends Controller
         }
 
         if (!$validator->fails()) {
-            $test = new Test();
-            $test->from = $request->post('from_juz');
-            $test->to = $request->post('to_juz');
-            $test->student_id = $request->post('student_id');
-            $test->keeper_id = \auth()->user()->id;
-            $test->description = $request->post('description');
-            $isCreated = $test->save();
+            $test_id = $isCreated = DB::table('tests')->insertGetId([
+                'from' => $request->post('from_juz'),
+                'to' => $request->post('to_juz'),
+                'student_id' => $request->post('student_id'),
+                'keeper_id' => \auth()->user()->id,
+                'description' => $request->post('description'),
+            ]);
+
+            $test = Test::findOrFail($test_id);
 
             CreateTestQuestiosJob::dispatch($test);
 
+//            return redirect()->route('test.marks.view', [
+//                'test_id' => Crypt::encrypt($test_id),
+//            ]);
+
             return \response()->json([
-                'message' => $isCreated ? 'Test created successfully, we are start to generate a dynamic questions for you' : 'Failed to create test!',
+                'message' => $isCreated ? 'Test created successfully, we are start to generate a dynamic questions for you. And we will redirect you after generate the questions automatically' : 'Failed to create test!',
+                'isCreated' => $isCreated,
+                'test' => $test,
             ], $isCreated ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST);
 
         } else {
@@ -94,9 +104,14 @@ class TestController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Test $test)
+    public function show($test_id)
     {
+        $test = Test::where('id', $test_id)->with(['questions', 'student'])->first();
         //
+//        dd($test);
+        return \response()->view('backend.tests.submit-test-mark', [
+            'test' => $test,
+        ]);
     }
 
     /**
@@ -121,5 +136,45 @@ class TestController extends Controller
     public function destroy(Test $test)
     {
         //
+    }
+
+
+    /*
+     * Get submit test mark view
+     * */
+    public function getMarkView($test_id)
+    {
+        $test = Test::where('id', Crypt::decrypt($test_id))->first();
+        return \response()->view('backend.tests.submit-test-mark', [
+            'test' => $test,
+        ]);
+    }
+
+    /*
+     * Store questions mark
+     * */
+    public function storeQuestionMark(Request $request)
+    {
+
+        /*
+         * We will not handle update the ayah right not
+         * */
+        $test = Test::where('id', Crypt::decrypt($request->post('test_id')))->with(['questions', 'student'])->first();
+        $questions = $test->questions;
+
+        $counter = 1;
+        foreach ($questions as $question) {
+            $question->faults_no = $request->post('question_mark_' . $counter);
+            ++$counter;
+            $question->save();
+        }
+
+        /*
+         * Calculate the whole test mark
+         * */
+
+        return \response()->json([
+            'message' => $test->id,
+        ], Response::HTTP_OK);
     }
 }
