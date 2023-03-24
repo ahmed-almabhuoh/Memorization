@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\api\accounts\ChangeMyPasswordRequest;
 use App\Http\Requests\api\accounts\UpdateMyAccountRequest;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
@@ -53,5 +54,14 @@ class AccountController extends Controller
         return \response()->json([
             'message' => $isChanged ? 'Password changed' : 'Failed to change password!',
         ], $isChanged ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
+    }
+
+    public function deleteMyAccount () {
+        $user = User::where('id', auth()->user()->id)->first();
+        $user->status = 'draft';
+        $user->deleted_at = Carbon::now();
+        $user->save();
+
+        return redirect()->route('logout');
     }
 }

@@ -23,15 +23,16 @@ Route::prefix('auto')->group(function () {
     Route::post('login', [\App\Http\Controllers\api\AuthenticationController::class, 'login']);
 });
 
-Route::prefix('auto')->middleware('auth:sanctum')->group(function () {
+Route::prefix('auto')->middleware(['auth:sanctum', 'deleted-api'])->group(function () {
 
     /*
-     * General Routes
+     * General Routes (All Roles)
      * */
     Route::prefix('mng/accounts')->group(function () {
         Route::get('/', [\App\Http\Controllers\api\accounts\AccountController::class, 'getAccount']);
-        Route::put('/update',[\App\Http\Controllers\api\accounts\AccountController::class, 'updateMyAccount']);
-        Route::put('/change-password',[\App\Http\Controllers\api\accounts\AccountController::class, 'changeMyPassword']);
+        Route::put('/update', [\App\Http\Controllers\api\accounts\AccountController::class, 'updateMyAccount']);
+        Route::put('/change-password', [\App\Http\Controllers\api\accounts\AccountController::class, 'changeMyPassword']);
+        Route::get('/delete-account', [\App\Http\Controllers\api\accounts\AccountController::class, 'deleteMyAccount']);
     });
 
 //    Route::get('/test', function () {
@@ -154,7 +155,7 @@ Route::prefix('auto')->middleware('auth:sanctum')->group(function () {
 
 
     // Log out
-    Route::get('logout', [\App\Http\Controllers\api\AuthenticationController::class, 'logout']);
+    Route::get('logout', [\App\Http\Controllers\api\AuthenticationController::class, 'logout'])->name('logout');
 });
 
 

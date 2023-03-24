@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\Activation;
+use App\Http\Middleware\api\DeleteAccountMiddleware;
 use App\Http\Middleware\DenyDeleted;
 use App\Http\Middleware\Keeper;
 use App\Http\Middleware\Student;
@@ -73,5 +74,6 @@ class Kernel extends HttpKernel
         'soft_deleted' => DenyDeleted::class,
         'student-parent-api' => Student::class,
         'keeper-api' => Keeper::class,
+        'deleted-api' => DeleteAccountMiddleware::class,
     ];
 }
