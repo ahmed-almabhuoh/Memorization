@@ -31,6 +31,7 @@ Route::prefix('auto')->middleware('auth:sanctum')->group(function () {
     Route::prefix('mng/accounts')->group(function () {
         Route::get('/', [\App\Http\Controllers\api\accounts\AccountController::class, 'getAccount']);
         Route::put('/update',[\App\Http\Controllers\api\accounts\AccountController::class, 'updateMyAccount']);
+        Route::put('/change-password',[\App\Http\Controllers\api\accounts\AccountController::class, 'changeMyPassword']);
     });
 
 //    Route::get('/test', function () {

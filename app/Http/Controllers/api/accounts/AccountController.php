@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\api\accounts;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\api\accounts\ChangeMyPasswordRequest;
 use App\Http\Requests\api\accounts\UpdateMyAccountRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
 
 class AccountController extends Controller
@@ -40,5 +42,16 @@ class AccountController extends Controller
             'message' => $isUpdated ? 'Account updated' : 'Failed to update, please try again!',
             'user' => auth()->user(),
         ], $isUpdated ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
+    }
+
+    public function changeMyPassword (ChangeMyPasswordRequest $request) {
+        $user = User::where('id', auth()->user()->id)->first();
+
+        $user->password = Hash::make($request->post('password'));
+        $isChanged = $user->save();
+
+        return \response()->json([
+            'message' => $isChanged ? 'Password changed' : 'Failed to change password!',
+        ], $isChanged ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
     }
 }
