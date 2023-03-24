@@ -18,14 +18,14 @@ class Test extends Model
     {
         $position = auth()->user()->position;
         if ($position == 'keeper') {
-            return $query->where('keeper', function ($query) {
+            return $query->whereHas('keeper', function ($query) {
                 $query->where([
                     ['keeper_id', '=', auth()->user()->id],
                     ['position', '=', 'keeper'],
                 ]);
             });
         } else if ($position == 'student') {
-            return $query->where('student', function ($query) {
+            return $query->whereHas('student', function ($query) {
                 $query->where([
                     ['student_id', '=', auth()->user()->id],
                     ['position', '=', 'student'],
