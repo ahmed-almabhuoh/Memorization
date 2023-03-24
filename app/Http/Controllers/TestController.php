@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\CreateTestQuestiosJob;
+use App\Jobs\tests\NotifyUserWhenSubmitMarkJob;
 use App\Models\Test;
 use App\Models\User;
+use App\Notifications\tests\SubmitMarkNotification;
 use App\Rules\StudentBelongsToKeeper;
 use Dotenv\Validator;
 use Illuminate\Http\Request;
@@ -169,12 +171,18 @@ class TestController extends Controller
             $question->save();
         }
 
+        $student = $test->student;
+//        $parent = $student->parent;
+
         /*
          * Calculate the whole test mark
          * */
+        if ($request->post('notify')) {
+            $student->notify(new SubmitMarkNotification());
+        }
 
         return \response()->json([
-            'message' => $test->id,
+            'message' => 'Mark saved successfully',
         ], Response::HTTP_OK);
     }
 }

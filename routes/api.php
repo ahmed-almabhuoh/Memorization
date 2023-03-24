@@ -25,11 +25,19 @@ Route::prefix('auto')->group(function () {
 
 Route::prefix('auto')->middleware('auth:sanctum')->group(function () {
 
-    Route::get('/test', function () {
-        return response()->json([
-            'message' => 'Here'
-        ]);
-    })->middleware('parent-api');
+    /*
+     * General Routes
+     * */
+    Route::prefix('mng')->group(function () {
+        Route::get('/accounts', [\App\Http\Controllers\api\accounts\AccountController::class, 'getAccount']);
+    });
+
+//    Route::get('/test', function () {
+//        return response()->json([
+//            'message' => 'Here'
+//        ]);
+//    })->middleware('parent-api');
+
 
     // Resources
     Route::prefix('/')->group(function () {

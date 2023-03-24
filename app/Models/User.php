@@ -202,9 +202,15 @@ class User extends Authenticatable implements FromCollection, WithHeadings, With
         return $this->hasMany(Keeps::class, 'student_id', 'id');
     }
 
-    public function reports () {
-        return $this->hasMany(Report::class, 'keeper_id', 'id');
-    }
+//    public function reports () {
+//        return $this->hasMany(Report::class, 'keeper_id', 'id');
+//    }
+//
+//    public function parent () {
+//        return $this->belongsTo(User::class, 'parent_id', 'id');
+//    }
+
+    public function children () {}
 
 
     /*
