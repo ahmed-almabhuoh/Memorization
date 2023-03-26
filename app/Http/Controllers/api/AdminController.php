@@ -31,6 +31,22 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'fname' => 'required|string|min:2|max:20',
+            'sname' => 'required|string|min:2|max:20',
+            'tname' => 'required|string|min:2|max:20',
+            'lname' => 'required|string|min:2|max:20',
+            'email' => 'nullable|email|unique:users,email',
+            'phone' => 'nullable|unique:users,phone',
+            'gender' => 'required|string|in:male,female',
+            'status' => 'required|string|in:active,draft,blocked',
+            'identity_no' => 'required|string|min:9|max:9|unique:users,identity_no',
+            'password' => ['nullable', Password::min(8)->uncompromised()->letters()->numbers(), 'max:25'],
+            'image' => 'nullable|image',
+            'local_region' => 'nullable|min:5|max:50',
+            'description' => 'nullable|min:10|max:150'
+        ]);
+
         $admin = new User();
         $admin->fname = $request->input('fname');
         $admin->sname = $request->input('sname');
@@ -87,7 +103,7 @@ class AdminController extends Controller
                 'message' => 'Admin not found!',
             ], Response::HTTP_BAD_REQUEST);
 
-        $request->validate([  'fname' => 'required|string|min:2|max:20',
+        $request->validate(['fname' => 'required|string|min:2|max:20',
             'sname' => 'required|string|min:2|max:20',
             'tname' => 'required|string|min:2|max:20',
             'lname' => 'required|string|min:2|max:20',
