@@ -33,15 +33,15 @@ class AdminController extends Controller
     {
         $request->validate([
             'fname' => 'required|string|min:2|max:20',
-            'sname' => 'required|string|min:2|max:20',
-            'tname' => 'required|string|min:2|max:20',
+            'sname' => 'nullable|min:2|max:20',
+            'tname' => 'nullable|min:2|max:20',
             'lname' => 'required|string|min:2|max:20',
             'email' => 'nullable|email|unique:users,email',
-            'phone' => 'nullable|unique:users,phone',
+            'phone' => 'nullable',
             'gender' => 'required|string|in:male,female',
             'status' => 'required|string|in:active,draft,blocked',
             'identity_no' => 'required|string|min:9|max:9|unique:users,identity_no',
-            'password' => ['nullable', Password::min(8)->uncompromised()->letters()->numbers(), 'max:25'],
+            'password' => ['nullable', Password::min(6)->numbers(), 'max:25'],
             'image' => 'nullable|image',
             'local_region' => 'nullable|min:5|max:50',
             'description' => 'nullable|min:10|max:150'
@@ -104,15 +104,15 @@ class AdminController extends Controller
             ], Response::HTTP_BAD_REQUEST);
 
         $request->validate(['fname' => 'required|string|min:2|max:20',
-            'sname' => 'required|string|min:2|max:20',
-            'tname' => 'required|string|min:2|max:20',
+            'sname' => 'nullable|min:2|max:20',
+            'tname' => 'nullable|min:2|max:20',
             'lname' => 'required|string|min:2|max:20',
-            'phone' => 'required|string|min:7|max:13|unique:users,phone,' . $admin->id,
+            'phone' => 'nullable',
             'email' => 'required|email|unique:users,email,' . $admin->id,
             'gender' => 'required|string|in:male,female',
             'status' => 'required|string|in:active,draft,blocked',
             'identity_no' => 'required|string|min:9|max:9|unique:users,identity_no,' . $admin->id,
-            'password' => ['nullable', Password::min(8)->uncompromised()->letters()->numbers(), 'max:25'],
+            'password' => ['nullable', Password::min(6)->numbers(), 'max:25'],
             'image' => 'nullable|image',
             'local_region' => 'nullable|min:5|max:50',
             'description' => 'nullable|min:10|max:150',]);
