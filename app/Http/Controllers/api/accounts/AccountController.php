@@ -14,12 +14,33 @@ use Symfony\Component\HttpFoundation\Response;
 class AccountController extends Controller
 {
     //
-    public function getAccount () {
+    public function getAccount()
+    {
         return auth()->user();
     }
 
-    public function updateMyAccount (UpdateMyAccountRequest $request) {
+    public function updateMyAccount(UpdateMyAccountRequest $request)
+    {
         $user = User::where('id', auth()->user()->id)->first();
+
+//        return \response()->json([
+//            'message' => User::where([
+//                ['email', '=', $request->post('email')],
+//                ['id', '!=', $user->id],
+//            ])->exists()
+//        ]);
+//
+//        if (User::where([
+//                ['email', '=', $request->post('email')],
+//                ['id', '!=', $user->id],
+//            ])->exists() || User::where([
+//                ['identity_no', '=', $request->post('identity_no')],
+//                ['id', '!=', $user->id],
+//            ])->exists()) {
+//            return \response()->json([
+//                'message' => 'Some data duplicated!',
+//            ]);
+//        }
 
         $user->fname = $request->post('fname');
         $user->sname = $request->post('sname');
@@ -45,7 +66,8 @@ class AccountController extends Controller
         ], $isUpdated ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
     }
 
-    public function changeMyPassword (ChangeMyPasswordRequest $request) {
+    public function changeMyPassword(ChangeMyPasswordRequest $request)
+    {
         $user = User::where('id', auth()->user()->id)->first();
 
         $user->password = Hash::make($request->post('password'));
@@ -56,7 +78,8 @@ class AccountController extends Controller
         ], $isChanged ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
     }
 
-    public function deleteMyAccount () {
+    public function deleteMyAccount()
+    {
         $user = User::where('id', auth()->user()->id)->first();
         $user->status = 'draft';
         $user->deleted_at = Carbon::now();

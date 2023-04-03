@@ -23,14 +23,14 @@ class UpdateMyAccountRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            // Material Status, DOB, Classroom
             'fname' => 'required|string|min:2|max:20',
-            'sname' => 'required|string|min:2|max:20',
-            'tname' => 'required|string|min:2|max:20',
+            'sname' => 'nullable|min:2|max:20',
+            'tname' => 'nullable|min:2|max:20',
             'lname' => 'required|string|min:2|max:20',
-            'phone' => 'required|string|min:7|max:13|unique:users,phone',
-            'email' => 'required|email|unique:users,email',
-            'identity_no' => 'required|string|min:9|max:9|unique:users,identity_no',
+            'phone' => 'nullable|min:7|max:13',
+            'email' => 'nullable|email|unique:users,email,' . $this->user()->id,
+            'identity_no' => 'required|string|min:9|max:9|unique:users,email,' . $this->user()->id,
             'image' => 'nullable',
             'local_region' => 'nullable|min:5|max:50',
             'description' => 'nullable|min:10|max:150',
