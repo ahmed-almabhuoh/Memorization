@@ -70,12 +70,20 @@ class AccountController extends Controller
     {
         $user = User::where('id', auth()->user()->id)->first();
 
-        $user->password = Hash::make($request->post('password'));
-        $isChanged = $user->save();
+        if (Hash::check($request->post('current_password'), $user->password)) {
 
-        return \response()->json([
-            'message' => $isChanged ? 'Password changed' : 'Failed to change password!',
-        ], $isChanged ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
+            $user->password = Hash::make($request->post('new_password'));
+            $isChanged = $user->save();
+
+            return \response()->json([
+                'message' => $isChanged ? 'Password changed successfully' : 'Failed to change password!',
+            ], $isChanged ? Response::HTTP_BAD_REQUEST : Response::HTTP_OK);
+        }else {
+            return \response()->json([
+                'message' => 'Wrong password!',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
     }
 
     public function deleteMyAccount()
