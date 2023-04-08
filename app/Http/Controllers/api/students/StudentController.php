@@ -86,7 +86,7 @@ class StudentController extends Controller
             'tname' => 'nullable|min:2|max:20',
             'lname' => 'required|string|min:2|max:20',
             'phone' => 'nullable',
-            'email' => 'required|email|unique:users,email,' . $student_id,
+            'email' => 'nullable|unique:users,email,' . $student_id,
             'gender' => 'required|string|in:male,female',
             'position' => 'required|string|in:student',
             'status' => 'required|string|in:active,draft,blocked',

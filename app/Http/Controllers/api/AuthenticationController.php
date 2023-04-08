@@ -14,14 +14,18 @@ class AuthenticationController extends Controller
     //
     public function login (LoginRequest $request) {
         //
-        $key = is_numeric($request->post('username')) ? 'identity_no' : 'email';
+//        $key = is_numeric($request->post('username')) ? 'identity_no' : 'email';
         $credentials = [
-            $key => $request->post('username'),
+            'identity_no' => $request->post('username'),
             'password' => $request->post('password'),
         ];
 
+
         if (Auth::guard('web')->attempt($credentials, $request->post('remember_me'))) {
             $user = Auth::user();
+            if ($user->deleted_at) {
+                return redirect()->route('logout');
+            }
 //            Delete all tokens for the user
             $user->tokens()->delete();
 

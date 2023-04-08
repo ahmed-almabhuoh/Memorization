@@ -16,9 +16,12 @@ class DeleteAccountMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if (auth()->user()->deleted_at) {
-            return \response()->json([
-                'message' => 'Your account has been deleted before!',
-            ], Response::HTTP_BAD_REQUEST);
+            return redirect()->route('logout')->with([
+                'message' => 'Your account has been deleted before!'
+            ]);
+//            return \response()->json([
+//                'message' => 'Your account has been deleted before!',
+//            ], Response::HTTP_BAD_REQUEST);
         }
 
         return $next($request);

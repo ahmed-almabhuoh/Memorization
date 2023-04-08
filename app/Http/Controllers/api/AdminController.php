@@ -41,7 +41,7 @@ class AdminController extends Controller
             'gender' => 'required|string|in:male,female',
             'status' => 'required|string|in:active,draft,blocked',
             'identity_no' => 'required|string|min:9|max:9|unique:users,identity_no',
-            'password' => ['nullable', Password::min(6)->numbers(), 'max:25'],
+            'password' => ['required', 'string', Password::min(6)->numbers(), 'max:25'],
             'image' => 'nullable|image',
             'local_region' => 'nullable|min:5|max:50',
             'description' => 'nullable|min:10|max:150'
@@ -108,7 +108,7 @@ class AdminController extends Controller
             'tname' => 'nullable|min:2|max:20',
             'lname' => 'required|string|min:2|max:20',
             'phone' => 'nullable',
-            'email' => 'required|email|unique:users,email,' . $admin->id,
+            'email' => 'nullable|unique:users,email,' . $admin->id,
             'gender' => 'required|string|in:male,female',
             'status' => 'required|string|in:active,draft,blocked',
             'identity_no' => 'required|string|min:9|max:9|unique:users,identity_no,' . $admin->id,

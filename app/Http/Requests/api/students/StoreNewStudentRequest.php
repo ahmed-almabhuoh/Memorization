@@ -33,7 +33,7 @@ class StoreNewStudentRequest extends FormRequest
             'position' => 'required|string|in:student',
             'status' => 'required|string|in:active,draft,blocked',
             'identity_no' => 'required|string|min:9|max:9|unique:users,identity_no',
-            'password' => ['nullable', Password::min(6)->numbers(), 'max:25'],
+            'password' => ['required', 'string', Password::min(6)->numbers(), 'max:25'],
             'image' => 'nullable',
             'local_region' => 'nullable|min:5|max:50',
             'description' => 'nullable|min:10|max:150',

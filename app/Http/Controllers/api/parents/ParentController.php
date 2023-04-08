@@ -86,7 +86,7 @@ class ParentController extends Controller
             'tname' => 'nullable|min:2|max:20',
             'lname' => 'required|string|min:2|max:20',
             'phone' => 'nullable',
-            'email' => 'required|email|unique:users,email,' . $parent_id,
+            'email' => 'nullable|email|unique:users,email,' . $parent_id,
             'gender' => 'required|string|in:male,female',
             'position' => 'required|string|in:parent',
             'status' => 'required|string|in:active,draft,blocked',
