@@ -72,6 +72,9 @@ Route::prefix('auto')->middleware(['auth:sanctum', 'deleted-api'])->group(functi
         Route::delete('/{supervisor_id}', [\App\Http\Controllers\api\Supervisors\SupervisorController::class, 'destroy']);
     });
 
+    Route::resource('branches', \App\Http\Controllers\api\branches\BranchController::class);
+    Route::resource('centers', \App\Http\Controllers\api\centers\CenterController::class);
+
     /*
      * Keepers
      * */
