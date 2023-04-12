@@ -42,7 +42,7 @@ class CenterController extends Controller
         $image_path = null;
         if ($request->hasFile('image')) {
             $file = $request->file('image');
-            $image_path = $file->store('content/branches', 'public');
+            $image_path = $file->store('content/centers', 'public');
         }
         $center->image = $image_path;
 
@@ -94,7 +94,7 @@ class CenterController extends Controller
         $image_path = null;
         if ($request->hasFile('image')) {
             $file = $request->file('image');
-            $image_path = $file->store('content/branches', 'public');
+            $image_path = $file->store('content/centers', 'public');
         }
         $center->image = $image_path;
 

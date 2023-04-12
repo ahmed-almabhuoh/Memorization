@@ -74,6 +74,7 @@ Route::prefix('auto')->middleware(['auth:sanctum', 'deleted-api'])->group(functi
 
     Route::resource('branches', \App\Http\Controllers\api\branches\BranchController::class);
     Route::resource('centers', \App\Http\Controllers\api\centers\CenterController::class);
+    Route::resource('groups', \App\Http\Controllers\api\groups\GroupController::class);
 
     /*
      * Keepers
