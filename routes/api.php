@@ -76,6 +76,10 @@ Route::prefix('auto')->middleware(['auth:sanctum', 'deleted-api'])->group(functi
     Route::resource('centers', \App\Http\Controllers\api\centers\CenterController::class);
     Route::resource('groups', \App\Http\Controllers\api\groups\GroupController::class);
 
+    Route::prefix('groups')->group(function () {
+        Route::post('add-student', [\App\Http\Controllers\api\groups\GroupController::class, 'addStudentToGroup']);
+    });
+
     /*
      * Keepers
      * */

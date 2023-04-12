@@ -4,7 +4,10 @@ namespace App\Http\Controllers\api\groups;
 
 use App\Http\Controllers\Controller;
 use App\Models\Group;
+use Carbon\Carbon;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
 class GroupController extends Controller
@@ -63,7 +66,7 @@ class GroupController extends Controller
             return \response()->json([
                 'message' => 'Group not found!',
             ], 400);
-        }else {
+        } else {
             return \response()->json([
                 'group' => $group,
             ], Response::HTTP_OK);
@@ -115,10 +118,56 @@ class GroupController extends Controller
             return \response()->json([
                 'message' => 'Group (' . $group->name . ') deleted successfully',
             ], Response::HTTP_OK);
-        }else {
+        } else {
             return \response()->json([
                 'message' => 'Failed to delete the group, please try again later!',
             ], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+
+    public function addStudentToGroup(Request $request)
+    {
+        $request->validate([
+            'student_id' => 'required|integer|exists:users,id',
+            'group_id' => 'required|integer|exists:groups,id',
+        ]);
+        $student = User::where([
+            ['id', '=', $request->post('student_id')],
+            ['position', '=', 'student'],
+        ])->first();
+        $group = Group::where('id', $request->post('group_id'))->first();
+
+        if (is_null($group) || is_null($student)) {
+            return \response()->json([
+                'message' => 'Wrong URL, please try again!',
+            ], Response::HTTP_BAD_REQUEST);
+        } else {
+            $id = false;
+            if (DB::table('group_student')->where([
+                ['student_id', '=', $student->id],
+                ['group_id', '=', $group->id],
+            ])->exists()) {
+                $id = DB::table('group_student')->where([
+                    ['student_id', '=', $student->id],
+                    ['group_id', '=', $group->id],
+                ])->update([
+                    'student_id' => $student->id,
+                    'group_id' => $group->id,
+                    'updated_at' => Carbon::now(),
+                ]);
+            } else {
+                $id = DB::table('group_student')->insertGetId([
+                    'student_id' => $student->id,
+                    'group_id' => $group->id,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ]);
+            }
+
+            return \response()->json([
+                'message' => $id ? 'Student (' . $student->fname . ') added to group (' . $group->name . ') successfully' : 'Failed to add the student to the group!',
+            ], $id ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST);
         }
     }
 }
