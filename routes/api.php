@@ -102,7 +102,16 @@ Route::prefix('auto')->middleware(['auth:sanctum', 'deleted-api'])->group(functi
          * */
         Route::prefix('tests')->group(function () {
 //            Route::get('get-info', [\App\Http\Controllers\api\TestController::class, 'getInfoToGenerateTest']);
-            Route::get('generate', [\App\Http\Controllers\api\TestController::class, 'generateTest']);
+//            Route::get('generate', [\App\Http\Controllers\api\TestController::class, 'generateTest']);
+            Route::get('ayahs', function () {
+                $a = [];
+                foreach (json_decode(file_get_contents(storage_path('quran1.json')))->data->surahs as $surah) {
+                    $a[] = $surah->numberOfAyahs;
+                }
+                return response()->json([
+                    'message' => $a,
+                ], 200);
+            });
         });
     });
 

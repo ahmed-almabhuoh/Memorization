@@ -8,7 +8,7 @@
                     <div class="col-md-4 my-2 my-md-0">
                         <div class="input-icon">
                             <input type="text" wire:model="searchTerm" class="form-control" placeholder="Search ..."
-                                id="kt_datatable_search_query">
+                                   id="kt_datatable_search_query">
                             <span>
                                 <i class="flaticon2-search-1 text-muted"></i>
                             </span>
@@ -34,78 +34,85 @@
     <!--end: Search Form-->
     <!--begin: Datatable-->
     <div class="datatable datatable-bordered datatable-head-custom datatable-default datatable-primary datatable-loaded"
-        id="kt_datatable" style="position: static; zoom: 1;">
+         id="kt_datatable" style="position: static; zoom: 1;">
         <table class="datatable-table" style="display: block;">
             <thead class="datatable-head">
-                <tr class="datatable-row" style="left: 0px;">
-                    <th data-field="Country" class="datatable-cell datatable-cell-sort"><span
-                            style="width: 121px;">Name</span></th>
-                    <th data-field="Country" class="datatable-cell datatable-cell-sort"><span
-                            style="width: 121px;">Image</span></th>
-                    <th data-field="Country" class="datatable-cell datatable-cell-sort"><span
-                            style="width: 121px;">CEO</span></th>
-                    <th data-field="CompanyName" class="datatable-cell datatable-cell-sort"><span
-                            style="width: 121px;">Region</span></th>
-                    <th data-field="Status" class="datatable-cell datatable-cell-sort"><span
-                            style="width: 121px;">Status</span></th>
-                    <th data-field="Type" data-autohide-disabled="false" class="datatable-cell datatable-cell-sort">
-                        <span style="width: 121px;">Deleted</span>
-                    <th data-field="Actions" data-autohide-disabled="false" class="datatable-cell datatable-cell-sort">
-                        <span style="width: 125px;">Actions</span>
-                    </th>
-                </tr>
+            <tr class="datatable-row" style="left: 0px;">
+                <th data-field="Country" class="datatable-cell datatable-cell-sort"><span
+                        style="width: 121px;">Name</span></th>
+                <th data-field="Country" class="datatable-cell datatable-cell-sort"><span
+                        style="width: 121px;">Image</span></th>
+                <th data-field="Country" class="datatable-cell datatable-cell-sort"><span
+                        style="width: 121px;">CEO</span></th>
+                <th data-field="CompanyName" class="datatable-cell datatable-cell-sort"><span
+                        style="width: 121px;">Region</span></th>
+                <th data-field="Status" class="datatable-cell datatable-cell-sort"><span
+                        style="width: 121px;">Status</span></th>
+                <th data-field="Type" data-autohide-disabled="false" class="datatable-cell datatable-cell-sort">
+                    <span style="width: 121px;">Deleted</span>
+                <th data-field="Actions" data-autohide-disabled="false" class="datatable-cell datatable-cell-sort">
+                    <span style="width: 125px;">Actions</span>
+                </th>
+            </tr>
             </thead>
             <tbody class="datatable-body" style="">
-                @if (!count($groups))
-                    <tr>
-                        <td colspan="5">
-                            <p>No data found ...</p>
-                        </td>
-                    </tr>
-                @endif
-                @foreach ($groups as $group)
-                    <tr data-row="0" class="datatable-row" style="left: 0px;">
-                        <td data-field="Country" aria-label="China" class="datatable-cell"><span
-                                style="width: 121px;">{{ $group->name }}</span></td>
-                        <td data-field="ShipDate" aria-label="8/27/2017" class="datatable-cell"><span
-                                style="width: 121px;">
+            @if (!count($groups))
+                <tr>
+                    <td colspan="5">
+                        <p>No data found ...</p>
+                    </td>
+                </tr>
+            @endif
+            @foreach ($groups as $group)
+                <tr data-row="0" class="datatable-row" style="left: 0px;">
+                    <td data-field="Country" aria-label="China" class="datatable-cell"><span
+                            style="width: 121px;">{{ $group->name }}</span></td>
+                    <td data-field="ShipDate" aria-label="8/27/2017" class="datatable-cell"><span
+                            style="width: 121px;">
                                 @if ($group->image)
-                                    <img src="{{ Storage::url($group->image) }}" id="group-image" alt="-">
-                                @else
-                                    -
-                                @endif
+                                <img src="{{ Storage::url($group->image) }}" id="group-image" alt="-">
+                            @else
+                                -
+                            @endif
                             </span></td>
+
+                    @if($group->keeper)
                         <td data-field="ShipDate" aria-label="8/27/2017" class="datatable-cell"><span
                                 style="width: 121px;"><a
-                                    href="{{ route('supervisors.edit', Crypt::encrypt($group->keeper->id)) }}">{{ $group->keeper->fname }}</a></span>
+                                    href="{{ route('keepers.edit', Crypt::encrypt($group->keeper->id)) }}">{{ $group->keeper->fname }}</a></span>
                         </td>
-                        <td data-field="ShipDate" aria-label="8/27/2017" class="datatable-cell"><span
-                                style="width: 121px;">{{ $group->region }}</span></td>
-                        <td data-field="Status" aria-label="6" class="datatable-cell"><span style="width: 121px;"><span
-                                    class="{{ $group->group_status_class }}">{{ ucfirst($group->status) }}</span></span>
-                        </td>
+                    @endif
 
-                        <td data-field="Type" data-autohide-disabled="false" aria-label="2" class="datatable-cell">
+                    <td data-field="ShipDate" aria-label="8/27/2017" class="datatable-cell"><span
+                            style="width: 121px;">{{ $group->region }}</span></td>
+                    <td data-field="Status" aria-label="6" class="datatable-cell"><span style="width: 121px;"><span
+                                class="{{ $group->group_status_class }}">{{ ucfirst($group->status) }}</span></span>
+                    </td>
+
+                    <td data-field="Type" data-autohide-disabled="false" aria-label="2" class="datatable-cell">
                             <span style="width: 121px;"><span
                                     class="label label-{{ $group->group_deletion_class }} label-dot mr-2">
                                 </span>
                                 <span
                                     class="font-weight-bold text-{{ $group->group_deletion_class }}">{{ $group->group_deletion }}</span>
                             </span>
-                        </td>
+                    </td>
 
 
-                        <td data-field="Actions" data-autohide-disabled="false" aria-label="null"
-                            class="datatable-cell"><span style="overflow: visible; position: relative; width: 125px;">
+                    <td data-field="Actions" data-autohide-disabled="false" aria-label="null"
+                        class="datatable-cell"><span style="overflow: visible; position: relative; width: 125px;">
                                 <div class="dropdown dropdown-inline"> <a href="javascript:;"
-                                        class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="dropdown"> <span
+                                                                          class="btn btn-sm btn-clean btn-icon mr-2"
+                                                                          data-toggle="dropdown"> <span
                                             class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg"
-                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                                                height="24px" viewBox="0 0 24 24" version="1.1">
+                                                                               xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                               width="24px"
+                                                                               height="24px" viewBox="0 0 24 24"
+                                                                               version="1.1">
                                                 <g stroke="none" stroke-width="1" fill="none"
-                                                    fill-rule="evenodd">
+                                                   fill-rule="evenodd">
                                                     <rect x="0" y="0" width="24"
-                                                        height="24">
+                                                          height="24">
                                                     </rect>
                                                     <path
                                                         d="M5,8.6862915 L5,5 L8.6862915,5 L11.5857864,2.10050506 L14.4852814,5 L19,5 L19,9.51471863 L21.4852814,12 L19,14.4852814 L19,19 L14.4852814,19 L11.5857864,21.8994949 L8.6862915,19 L5,19 L5,15.3137085 L1.6862915,12 L5,8.6862915 Z M12,15 C13.6568542,15 15,13.6568542 15,12 C15,10.3431458 13.6568542,9 12,9 C10.3431458,9 9,10.3431458 9,12 C9,13.6568542 10.3431458,15 12,15 Z"
@@ -133,10 +140,11 @@
                                         </ul>
                                     </div>
                                 </div> <a href="{{ route('groups.edit', Crypt::encrypt($group->id)) }}"
-                                    class="btn btn-sm btn-clean btn-icon mr-2" title="Edit details"> <span
-                                        class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg"
-                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                                            viewBox="0 0 24 24" version="1.1">
+                                          class="btn btn-sm btn-clean btn-icon mr-2" title="Edit details"> <span
+                                    class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg"
+                                                                       xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                       width="24px" height="24px"
+                                                                       viewBox="0 0 24 24" version="1.1">
                                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                 <rect x="0" y="0" width="24" height="24">
                                                 </rect>
@@ -146,15 +154,17 @@
                                                     transform="translate(12.000000, 10.707409) rotate(-135.000000) translate(-12.000000, -10.707409) ">
                                                 </path>
                                                 <rect fill="#000000" opacity="0.3" x="5" y="20"
-                                                    width="15" height="2" rx="1">
+                                                      width="15" height="2" rx="1">
                                                 </rect>
                                             </g>
                                         </svg> </span> </a> <button type="button"
-                                    onclick="confirmDestroy('{{ Crypt::encrypt($group->id) }}', this)"
-                                    class="btn btn-sm btn-clean btn-icon" title="Delete"> <span
-                                        class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg"
-                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                                            viewBox="0 0 24 24" version="1.1">
+                                                                    onclick="confirmDestroy('{{ Crypt::encrypt($group->id) }}', this)"
+                                                                    class="btn btn-sm btn-clean btn-icon"
+                                                                    title="Delete"> <span
+                                    class="svg-icon svg-icon-md"> <svg xmlns="http://www.w3.org/2000/svg"
+                                                                       xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                       width="24px" height="24px"
+                                                                       viewBox="0 0 24 24" version="1.1">
                                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                 <rect x="0" y="0" width="24" height="24">
                                                 </rect>
@@ -167,8 +177,8 @@
                                             </g>
                                         </svg> </span> </button>
                             </span></td>
-                    </tr>
-                @endforeach
+                </tr>
+            @endforeach
             </tbody>
         </table>
         <div class="datatable-pager datatable-paging-loaded">

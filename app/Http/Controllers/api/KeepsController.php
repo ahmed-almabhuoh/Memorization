@@ -27,34 +27,35 @@ class KeepsController extends Controller
     public function setKeep(AddNewKeepRequest $request, $student_id)
     {
         $student = User::students()->where('id', $student_id)->first();
+        if (is_null($student)) {
+            return \response()->json([
+                'message' => 'Wrong URL, please try again!',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
         $group = Group::whereHas('keeper', function ($query) {
             $query->where('id', Auth::id());
         })->first();
+
+        if (is_null($group)) {
+            return \response()->json([
+                'message' => 'Keeper does not a group yet!',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
         $student_group = Group::whereHas('students', function ($query) use ($student) {
             $query->where('student_id', $student->id);
-        })->first();
+        })->where('keeper_id', '=', \auth()->user()->id)->first();
+
+        if (is_null($student_group)) {
+            return \response()->json([
+                'message' => 'Student does not exists in this group, please try again!',
+            ], Response::HTTP_BAD_REQUEST);
+        }
 
         if ($student->status != 'active' || $group->status != 'active') {
             return $this->returnJSON([
                 'message' => 'Something is not ready to use, the status not active',
-            ], Response::HTTP_BAD_REQUEST);
-        }
-
-        if (is_null($group)) {
-            return $this->returnJSON([
-                'message' => 'Un-avialable resources',
-            ], Response::HTTP_BAD_REQUEST);
-        }
-
-        if (is_null($student_group)) {
-            return $this->returnJSON([
-                'message' => 'Un-avialable resources',
-            ], Response::HTTP_BAD_REQUEST);
-        }
-
-        if (is_null($student)) {
-            return \response()->json([
-                'message' => 'Student not found!',
             ], Response::HTTP_BAD_REQUEST);
         }
 
