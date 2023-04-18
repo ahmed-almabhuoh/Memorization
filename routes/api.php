@@ -102,6 +102,7 @@ Route::prefix('auto')->middleware(['auth:sanctum', 'deleted-api'])->group(functi
         Route::prefix('groups')->group(function () {
             Route::get('/', [\App\Http\Controllers\api\keepers\KeeperGroupController::class, 'getGroups']);
             Route::get('/students/{group_id?}', [\App\Http\Controllers\api\keepers\KeeperGroupController::class, 'getGroupStudents']);
+            Route::post('add-student', [\App\Http\Controllers\api\keepers\KeeperGroupController::class, 'addStudent']);
         });
 
 
