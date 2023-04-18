@@ -142,4 +142,15 @@ class KeeperGroupController extends Controller
             }
         }
     }
+
+    // Get my students in my group
+    public function getStudents () {
+        $user = Auth::user();
+        $group = $user->group;
+
+        return \response()->json([
+            'students' => $group->students,
+            'group' => $group,
+        ]);
+    }
 }
