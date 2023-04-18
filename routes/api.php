@@ -105,6 +105,7 @@ Route::prefix('auto')->middleware(['auth:sanctum', 'deleted-api'])->group(functi
             Route::post('add-student', [\App\Http\Controllers\api\keepers\KeeperGroupController::class, 'addStudent']);
             Route::post('remove-student', [\App\Http\Controllers\api\keepers\KeeperGroupController::class, 'removeStudent']);
             Route::get('get-students', [\App\Http\Controllers\api\keepers\KeeperGroupController::class, 'getStudents']);
+            Route::post('add-new-student', [\App\Http\Controllers\api\keepers\KeeperGroupController::class, 'addStudentNormalProcess']);
         });
 
 

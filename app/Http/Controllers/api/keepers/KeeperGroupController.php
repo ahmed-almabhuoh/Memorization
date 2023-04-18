@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\api\keepers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\api\students\StoreNewStudentRequest;
 use App\Models\Group;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
 
 class KeeperGroupController extends Controller
@@ -51,6 +53,8 @@ class KeeperGroupController extends Controller
     // Add a new student to my group
     public function addStudent(Request $request)
     {
+
+
         $request->validate([
             'student_id' => 'required|integer|exists:users,id',
         ]);
@@ -60,8 +64,8 @@ class KeeperGroupController extends Controller
         $group = $keeper->group;
 
         if (DB::table('group_student')->where([
-            ['group_id', '=', $group->id],
-        ])->count() >= 20){
+                ['group_id', '=', $group->id],
+            ])->count() >= 20) {
             return \response()->json([
                 'message' => 'The group contains 20 students, and this is the maximum number can assigned to this group!',
             ], Response::HTTP_BAD_REQUEST);
@@ -108,7 +112,8 @@ class KeeperGroupController extends Controller
 
 
     // Remove Student from group
-    public function removeStudent (Request $request) {
+    public function removeStudent(Request $request)
+    {
         $request->validate([
             'student_id' => 'required|integer|exists:users,id',
         ]);
@@ -122,7 +127,7 @@ class KeeperGroupController extends Controller
             return \response()->json([
                 'message' => 'Something went wrong with your request, please try again later!',
             ], Response::HTTP_BAD_REQUEST);
-        }else {
+        } else {
             if (DB::table('group_student')->where([
                 ['group_id', '=', $group->id],
                 ['student_id', '=', $student->id],
@@ -135,7 +140,7 @@ class KeeperGroupController extends Controller
                 return \response()->json([
                     'message' => 'Student removed successfully',
                 ], Response::HTTP_OK);
-            }else {
+            } else {
                 return \response()->json([
                     'message' => 'The student does not exists in this group to be removed!',
                 ], Response::HTTP_BAD_REQUEST);
@@ -144,7 +149,8 @@ class KeeperGroupController extends Controller
     }
 
     // Get my students in my group
-    public function getStudents () {
+    public function getStudents()
+    {
         $user = Auth::user();
         $group = $user->group;
 
@@ -152,5 +158,52 @@ class KeeperGroupController extends Controller
             'students' => $group->students,
             'group' => $group,
         ]);
+    }
+
+    // Add new student with normal process
+    public function addStudentNormalProcess(StoreNewStudentRequest $request)
+    {
+        $student = new User();
+        $student->fname = $request->input('fname');
+        $student->sname = $request->input('sname');
+        $student->tname = $request->input('tname');
+        $student->lname = $request->input('lname');
+        $student->phone = $request->input('phone');
+        $student->identity_no = $request->input('identity_no');
+        $student->email = $request->input('email');
+        $student->position = $request->post('position');
+        $student->password = Hash::make($request->input('password'));
+        $student->gender = $request->input('gender');
+        $student->status = $request->input('status');
+        $student->local_region = $request->input('local_region');
+        $student->description = $request->input('description');
+        $image_path = null;
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $image_path = $file->store('user/students', 'public');
+        }
+        $student->image = $image_path;
+        $isCreated = $student->save();
+
+        $user = Auth::user();
+        $group = $user->group;
+
+        if ($isCreated) {
+            $id = DB::table('group_student')->insertGetId([
+                'group_id' => $group->id,
+                'student_id' => $student->id,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+
+            return \response()->json([
+                'message' => $id ? 'Student ( ' . $student->fname . ') add to group.' : 'Failed to add the student to your group!',
+            ], $id ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST);
+        } else {
+            return \response()->json([
+                'message' => 'Something went wrong, please try again later!'
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
     }
 }
