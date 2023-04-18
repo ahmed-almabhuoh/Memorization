@@ -58,40 +58,86 @@ class KeeperGroupController extends Controller
         $student = User::students()->where('id', $request->post('student_id'))->first();
         $keeper = Auth::user();
         $group = $keeper->group;
-        if (is_null($student) || is_null($keeper)) {
 
+        if (DB::table('group_student')->where([
+            ['group_id', '=', $group->id],
+        ])->count() >= 20){
             return \response()->json([
-                'message' => 'Student you requested or your account not found, please try again!',
+                'message' => 'The group contains 20 students, and this is the maximum number can assigned to this group!',
             ], Response::HTTP_BAD_REQUEST);
-
         } else {
-            if (!is_null($group)) {
+            if (is_null($student) || is_null($keeper)) {
 
-                if (!DB::table('group_student')->where([
-                    ['group_id', '=', $group->id],
-                    ['student_id', '=', $student->id],
-                ])->exists()) {
+                return \response()->json([
+                    'message' => 'Student you requested or your account not found, please try again!',
+                ], Response::HTTP_BAD_REQUEST);
 
-                    $id = DB::table('group_student')->insertGetId([
-                        'group_id' => $group->id,
-                        'student_id' => $student->id,
-                        'created_at' => Carbon::now(),
-                        'updated_at' => Carbon::now(),
-                    ]);
-                    return \response()->json([
-                        'message' => $id ? 'Student ( ' . $student->fname . ') add to group.' : 'Failed to add the student to your group!',
-                    ], $id ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST);
+            } else {
+                if (!is_null($group)) {
+
+                    if (!DB::table('group_student')->where([
+                        ['group_id', '=', $group->id],
+                        ['student_id', '=', $student->id],
+                    ])->exists()) {
+
+                        $id = DB::table('group_student')->insertGetId([
+                            'group_id' => $group->id,
+                            'student_id' => $student->id,
+                            'created_at' => Carbon::now(),
+                            'updated_at' => Carbon::now(),
+                        ]);
+                        return \response()->json([
+                            'message' => $id ? 'Student ( ' . $student->fname . ') add to group.' : 'Failed to add the student to your group!',
+                        ], $id ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST);
+
+                    } else {
+                        return \response()->json([
+                            'message' => 'Student you are trying to add to this group already exists!',
+                        ], Response::HTTP_BAD_REQUEST);
+                    }
+
 
                 } else {
                     return \response()->json([
-                        'message' => 'Student you are trying to add to this group already exists!',
+                        'message' => 'You do not have a group yet, contact with support to add a group for you',
                     ], Response::HTTP_BAD_REQUEST);
                 }
+            }
+        }
+    }
 
 
-            } else {
+    // Remove Student from group
+    public function removeStudent (Request $request) {
+        $request->validate([
+            'student_id' => 'required|integer|exists:users,id',
+        ]);
+        //
+        $student = User::students()->where('id', $request->post('student_id'))->first();
+        $keeper = Auth::user();
+        $group = $keeper->group;
+
+
+        if (is_null($student) || is_null($keeper) || is_null($group)) {
+            return \response()->json([
+                'message' => 'Something went wrong with your request, please try again later!',
+            ], Response::HTTP_BAD_REQUEST);
+        }else {
+            if (DB::table('group_student')->where([
+                ['group_id', '=', $group->id],
+                ['student_id', '=', $student->id],
+            ])->exists()) {
+                DB::table('group_student')->where([
+                    ['group_id', '=', $group->id],
+                    ['student_id', '=', $student->id],
+                ])->delete();
+
                 return \response()->json([
-                    'message' => 'You do not have a group yet, contact with support to add a group for you',
+                    'message' => 'Student removed successfully',
+                ], Response::HTTP_OK);
+            }else {
+                return \response()->json([
+                    'message' => 'The student does not exists in this group to be removed!',
                 ], Response::HTTP_BAD_REQUEST);
             }
         }
