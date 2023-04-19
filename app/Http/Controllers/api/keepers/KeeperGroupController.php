@@ -152,12 +152,17 @@ class KeeperGroupController extends Controller
     public function getStudents()
     {
         $user = Auth::user();
-        $group = $user->group;
+        $group = $user->group()->with('students')->get();
 
-        return \response()->json([
-            'students' => $group->students,
-            'group' => $group,
-        ]);
+        if ($user->group) {
+            return \response()->json([
+                'group' => $group,
+            ]);
+        }else {
+            return \response()->json([
+                'message' => 'You do not have a group yet!',
+            ]);
+        }
     }
 
     // Add new student with normal process
