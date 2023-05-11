@@ -37,6 +37,15 @@ class GroupController extends Controller
             'local_region' => 'nullable',
         ]);
         //
+
+        $keeper = \App\Models\User::keeper()->where('id', $request->post('keeper_id'))->first();
+//        return \response()->json($keeper->group);
+        if ($keeper->group()->exists()) {
+            return \response()->json([
+                'message' => 'Keeper already has a group!',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
         $group = new Group();
         $group->name = $request->post('name');
         $group->status = $request->post('status');

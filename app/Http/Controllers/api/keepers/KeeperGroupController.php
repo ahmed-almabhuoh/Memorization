@@ -157,10 +157,12 @@ class KeeperGroupController extends Controller
         if ($user->group) {
             return \response()->json([
                 'group' => $group,
+                'status' => true,
             ]);
         }else {
             return \response()->json([
                 'message' => 'You do not have a group yet!',
+                'status' => false,
             ]);
         }
     }

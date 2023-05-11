@@ -83,8 +83,6 @@ class Branch extends Model implements FromCollection, WithHeadings, WithStyles
 
     public function supervisor()
     {
-        return $this->belongsTo(User::class, 'supervisor_id', 'id')->withDefault([
-            'full_name' => '-',
-        ]);
+        return $this->belongsTo(User::class, 'supervisor_id', 'id');
     }
 }
