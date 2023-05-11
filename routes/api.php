@@ -181,6 +181,26 @@ Route::prefix('auto')->middleware(['auth:sanctum', 'deleted-api'])->group(functi
                 Route::get('juz/{juz_id?}', [\App\Http\Controllers\api\KeepsController::class, 'loadQuranResources']);
             });
         });
+
+
+
+    });
+
+    /*
+     * Keeper & Students
+     * */
+    Route::prefix('absence')->middleware('absence')->group(function () {
+        /*
+         * Keeper Absence
+         * */
+        Route::get('/store/keeper', [\App\Http\Controllers\api\AbsenceController::class, 'setKeeperController']);
+        Route::post('/keeper/report', [\App\Http\Controllers\api\AbsenceController::class, 'submitReport']);
+
+        /*
+         * Students
+         * */
+        Route::get('students', [\App\Http\Controllers\api\AbsenceController::class, 'getStudent']);
+        Route::post('/store/student', [\App\Http\Controllers\api\AbsenceController::class, 'submitStudentAttendance']);
     });
 
 

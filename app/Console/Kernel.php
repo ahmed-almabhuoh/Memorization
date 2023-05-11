@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Jobs\StoreDailyKeeperAbsenceJob;
+use App\Jobs\StoreDailyStudentAbsencesJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -17,6 +19,10 @@ class Kernel extends ConsoleKernel
         $schedule->command('queue:work --stop-when-empty')
             ->everyMinute()
             ->withoutOverlapping();
+
+        $schedule->job(new StoreDailyKeeperAbsenceJob())->dailyAt('12:00');
+        $schedule->job(new StoreDailyStudentAbsencesJob())->dailyAt('12:00');
+//        $schedule->job(new StoreDailyKeeperAbsenceJob())->everyMinute();
     }
 
     /**
