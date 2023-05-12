@@ -16,13 +16,16 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
 
-        $schedule->command('queue:work --stop-when-empty')
-            ->everyMinute()
-            ->withoutOverlapping();
 
         $schedule->job(new StoreDailyKeeperAbsenceJob())->dailyAt('12:00');
         $schedule->job(new StoreDailyStudentAbsencesJob())->dailyAt('12:00');
+//        $schedule->job(new StoreDailyStudentAbsencesJob())->everyMinute();
 //        $schedule->job(new StoreDailyKeeperAbsenceJob())->everyMinute();
+
+
+        $schedule->command('queue:work --stop-when-empty')
+            ->everyMinute()
+            ->withoutOverlapping();
     }
 
     /**

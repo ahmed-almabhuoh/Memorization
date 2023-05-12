@@ -2,17 +2,14 @@
 
 namespace App\Jobs;
 
-use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\DB;
 
-class StoreDailyStudentAbsencesJob implements ShouldQueue
+class SendSubmittedKeepersReportToSuppervisors implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -30,16 +27,5 @@ class StoreDailyStudentAbsencesJob implements ShouldQueue
     public function handle(): void
     {
         //
-        $students = User::students()->get();
-
-        foreach ($students as $student) {
-            DB::table('absences')->insert([
-                'user_id' => $student->id,
-                'absence_type' => 'student',
-                'absence_date' => now()->toDateString(),
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ]);
-        }
     }
 }

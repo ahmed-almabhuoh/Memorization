@@ -9,6 +9,7 @@ use App\Models\Keeps;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Symfony\Component\HttpFoundation\Response;
 use function Ramsey\Uuid\buildRandomGenerator;
@@ -74,6 +75,17 @@ class KeepsController extends Controller
         $keep->faults = $request->post('faults_number');
         $keep->student_id = $student->id;
         $isCreated = $keep->save();
+
+        /*
+         * Submit Student Attendance
+         * */
+        DB::table('absences')->where([
+            ['user_id', '=',  $student_id],
+            ['absence_type', '=', 'student'],
+            ['absence_date', '=', now()->toDateString()],
+        ])->update([
+            'status' => true,
+        ]);
 
 
         return $this->returnJSON([
