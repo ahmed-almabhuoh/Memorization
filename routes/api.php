@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\api\keepers\ReportController;
+use App\Http\Controllers\api\StudentManagementController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -160,6 +161,13 @@ Route::prefix('auto')->middleware(['auth:sanctum', 'deleted-api'])->group(functi
             Route::post('/create', [\App\Http\Controllers\api\students\StudentController::class, 'store']);
             Route::put('/{student_id}', [\App\Http\Controllers\api\students\StudentController::class, 'update']);
             Route::delete('/{student_id}', [\App\Http\Controllers\api\students\StudentController::class, 'destroy']);
+
+            // Student - get my account
+            Route::prefix('/')->middleware('student-api')->group(function () {
+                Route::get('/mng/absence-attendace-days', [StudentManagementController::class, 'getMyAttendanceAndAbsencesDays']);
+                Route::get('/mng/keeps', [StudentManagementController::class, 'getStudentKeeps']);
+                Route::get('/mng/tests', [StudentManagementController::class, 'getStudentTests']);
+            });
         });
 
 

@@ -5,6 +5,7 @@ namespace App\Http;
 use App\Http\Middleware\Activation;
 use App\Http\Middleware\api\AbsenceMiddleware;
 use App\Http\Middleware\api\DeleteAccountMiddleware;
+use App\Http\Middleware\api\StudentMiddleware;
 use App\Http\Middleware\DenyDeleted;
 use App\Http\Middleware\Keeper;
 use App\Http\Middleware\Student;
@@ -77,5 +78,6 @@ class Kernel extends HttpKernel
         'keeper-api' => Keeper::class,
         'deleted-api' => DeleteAccountMiddleware::class,
         'absence' => AbsenceMiddleware::class,
+        'student-api' => StudentMiddleware::class,
     ];
 }
