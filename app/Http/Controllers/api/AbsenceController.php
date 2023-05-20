@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Notifications\api\SendNotificationToSupervisorWhenKeeperSubmitAttendanceNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use Symfony\Component\HttpFoundation\Response;
 
 class AbsenceController extends Controller
@@ -39,6 +42,8 @@ class AbsenceController extends Controller
         ]);
         //
         $user = Auth::user();
+        $supervisor = $user->group->center->branch->supervisor;
+
         DB::table('absences')->orderBy('created_at', 'DESC')->where([
             ['absence_date', '=', now()->toDateString()],
             ['user_id', '=', $user->id],
@@ -48,6 +53,9 @@ class AbsenceController extends Controller
         ])->update([
             'report' => $request->post('report'),
         ]);
+
+        if (!is_null($supervisor) && $supervisor->email)
+            $supervisor->notify(new SendNotificationToSupervisorWhenKeeperSubmitAttendanceNotification($supervisor, $user));
 
         return response()->json([
             'message' => 'Report submitted successfully, your are logged out.',

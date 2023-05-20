@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\api\keepers\ReportController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -35,11 +36,11 @@ Route::prefix('auto')->middleware(['auth:sanctum', 'deleted-api'])->group(functi
         Route::get('/delete-account', [\App\Http\Controllers\api\accounts\AccountController::class, 'deleteMyAccount']);
     });
 
-//    Route::get('/test', function () {
-//        return response()->json([
-//            'message' => 'Here'
-//        ]);
-//    })->middleware('parent-api');
+    //    Route::get('/test', function () {
+    //        return response()->json([
+    //            'message' => 'Here'
+    //        ]);
+    //    })->middleware('parent-api');
 
 
     // Resources
@@ -95,6 +96,11 @@ Route::prefix('auto')->middleware(['auth:sanctum', 'deleted-api'])->group(functi
             Route::delete('/{keeper_id}', [\App\Http\Controllers\api\keepers\KeeperController::class, 'destroy']);
         });
 
+        // Reports API
+        Route::prefix('report')->group(function () {
+            Route::get('monthly', [ReportController::class, 'monthly']);
+        });
+
 
         /*
          * Keeper Groups
@@ -113,8 +119,8 @@ Route::prefix('auto')->middleware(['auth:sanctum', 'deleted-api'])->group(functi
          * Tests Related to Keepers
          * */
         Route::prefix('tests')->group(function () {
-//            Route::get('get-info', [\App\Http\Controllers\api\TestController::class, 'getInfoToGenerateTest']);
-//            Route::get('generate', [\App\Http\Controllers\api\TestController::class, 'generateTest']);
+            Route::get('get-info', [\App\Http\Controllers\api\TestController::class, 'getInfoToGenerateTest']);
+            Route::get('generate', [\App\Http\Controllers\api\TestController::class, 'generateTest']);
             Route::get('ayahs', function () {
                 $a = [];
                 foreach (json_decode(file_get_contents(storage_path('quran1.json')))->data->surahs as $surah) {
@@ -181,9 +187,6 @@ Route::prefix('auto')->middleware(['auth:sanctum', 'deleted-api'])->group(functi
                 Route::get('juz/{juz_id?}', [\App\Http\Controllers\api\KeepsController::class, 'loadQuranResources']);
             });
         });
-
-
-
     });
 
     /*
@@ -207,6 +210,3 @@ Route::prefix('auto')->middleware(['auth:sanctum', 'deleted-api'])->group(functi
     // Log out
     Route::get('logout', [\App\Http\Controllers\api\AuthenticationController::class, 'logout'])->name('logout');
 });
-
-
-
