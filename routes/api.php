@@ -100,6 +100,7 @@ Route::prefix('auto')->middleware(['auth:sanctum', 'deleted-api'])->group(functi
 
 
             Route::get('/tests/index', [TestController::class, 'getTests']);
+            Route::post('/tests/submit-mark', [TestController::class, 'submitTestMark']);
         });
 
         // Reports API

@@ -96,4 +96,31 @@ class TestController extends Controller
             'tests' => Test::where('keeper_id', auth()->user()->id)->get(),
         ], Response::HTTP_OK);
     }
+
+    // Submit the test mark
+    public function submitTestMark(Request $request)
+    {
+        $request->validate([
+            'mark' => 'required|numeric|min:0|max:100',
+            'test_id' => 'required|integer|exists:tests,id',
+        ]);
+        //
+        $test = Test::where([
+            ['keeper_id', '=', auth()->user()->id],
+            ['id', '=', $request->post('test_id')],
+        ])->first();
+
+        if (!is_null($test)) {
+            $test->mark = $request->post('mark');
+            $isSaved = $test->save();
+
+            return response()->json([
+                'message' => $isSaved ? 'Mark submitted successfully' : 'Failed to submit the mark',
+            ], $isSaved ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
+        } else {
+            return response()->json([
+                'message' => 'Something went wrong!',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+    }
 }
