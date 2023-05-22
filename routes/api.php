@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\api\keepers\ReportController;
 use App\Http\Controllers\api\StudentManagementController;
+use App\Http\Controllers\api\TestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -95,6 +96,10 @@ Route::prefix('auto')->middleware(['auth:sanctum', 'deleted-api'])->group(functi
             Route::post('/create', [\App\Http\Controllers\api\keepers\KeeperController::class, 'store']);
             Route::put('/{keeper_id}', [\App\Http\Controllers\api\keepers\KeeperController::class, 'update']);
             Route::delete('/{keeper_id}', [\App\Http\Controllers\api\keepers\KeeperController::class, 'destroy']);
+
+
+
+            Route::get('/tests/index', [TestController::class, 'getTests']);
         });
 
         // Reports API

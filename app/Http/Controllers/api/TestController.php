@@ -88,4 +88,12 @@ class TestController extends Controller
 
         return $randomObjects;
     }
+
+    // Get tests
+    public function getTests()
+    {
+        return response()->json([
+            'tests' => Test::where('keeper_id', auth()->user()->id)->get(),
+        ], Response::HTTP_OK);
+    }
 }
