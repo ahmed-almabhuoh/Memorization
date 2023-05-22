@@ -7,6 +7,7 @@ use App\Http\Requests\api\AddNewKeepRequest;
 use App\Models\Group;
 use App\Models\Keeps;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -19,9 +20,19 @@ class KeepsController extends Controller
     //
     public function index()
     {
-        $user = Auth::user();
+        $keeps = Auth::user()->keeps()->paginate();
+
+        foreach ($keeps as $keep) {
+            $carbonDate = Carbon::parse($keep->created_at);
+            $dayOfWeekEnglish = $carbonDate->isoFormat('dddd'); // English day name
+            $dayOfWeekArabic = $carbonDate->locale('ar')->isoFormat('dddd'); // Arabic day name
+
+            $keep->setAttribute('day_en_name', $dayOfWeekEnglish); // Output: Wednesday
+            $keep->setAttribute('day_ar_name', $dayOfWeekArabic); // Output: الأربعاء
+        }
+
         return response()->json([
-            'keeps' => $user->keeps()->paginate(),
+            'keeps' => $keeps,
         ], Response::HTTP_OK);
     }
 
@@ -138,7 +149,7 @@ class KeepsController extends Controller
             ]);
         }
 
-//        return \response()->json($request->post('to_surah'));
+        //        return \response()->json($request->post('to_surah'));
         if ($condition) {
             $condition = false;
             foreach ($to_juz->data->surahs as $number => $info) {
@@ -162,7 +173,6 @@ class KeepsController extends Controller
                     break;
                 }
             }
-
         } else {
             return $this->returnJSON([
                 'message' => 'Incorrect input in (to surah) field',

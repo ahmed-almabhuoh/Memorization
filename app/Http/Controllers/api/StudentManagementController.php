@@ -34,9 +34,27 @@ class StudentManagementController extends Controller
         $today = Carbon::now()->day;
         $remainingDays = $totalDaysInMonth - $today;
 
+        $absences = Absence::where('user_id', $student_id)
+            ->where('absence_type', 'student')->get();
+
+        foreach ($absences as $ab) {
+            $dateString = $ab->absence_date;
+            $carbonDate = Carbon::createFromFormat('Y-m-d', $dateString);
+            $dayOfWeek = $carbonDate->format('l');
+            $ab->setAttribute('day_en_name', $dayOfWeek);
+            // // $dayOfWeek = $carbonDate->locale('ar')->format('l');
+            // $date = Carbon::parse($dateString);
+            // setlocale(LC_TIME, 'ar'); // Set the locale to Arabic
+            // $arabicDayName = $date->formatLocalized('%A');
+            // $ab->setAttribute('day_ar_name', $arabicDayName);
+
+            $carbonDate->locale('ar'); // Set the locale to Arabic
+            $arabicDayName = $carbonDate->isoFormat('dddd');
+            $ab->setAttribute('day_ar_name', $arabicDayName);
+        }
+
         return [
-            'all' => Absence::where('user_id', $student_id)
-                ->where('absence_type', 'student')->get(),
+            'all' => $absences,
             'absenceDays' => $absenceDays,
             'attendanceDays' => $attendanceDays,
             'remainingDays' => $remainingDays,
@@ -47,8 +65,20 @@ class StudentManagementController extends Controller
     public function getStudentKeeps()
     {
         $student_id = auth()->user()->id;
+
+        $keeps =  Keeps::where('student_id', $student_id)->get();
+
+        foreach ($keeps as $keep) {
+            $carbonDate = Carbon::parse($keep->created_at);
+            $dayOfWeekEnglish = $carbonDate->isoFormat('dddd'); // English day name
+            $dayOfWeekArabic = $carbonDate->locale('ar')->isoFormat('dddd'); // Arabic day name
+
+            $keep->setAttribute('day_en_name', $dayOfWeekEnglish); // Output: Wednesday
+            $keep->setAttribute('day_ar_name', $dayOfWeekArabic); // Output: الأربعاء
+        }
+
         return response()->json([
-            'keeps' => Keeps::where('student_id', $student_id)->get(),
+            'keeps' => $keeps,
         ], Response::HTTP_OK);
     }
 
