@@ -106,6 +106,9 @@ Route::prefix('auto')->middleware(['auth:sanctum', 'deleted-api'])->group(functi
         // Reports API
         Route::prefix('report')->group(function () {
             Route::get('monthly', [ReportController::class, 'monthly']);
+
+            Route::get('/my-reports', [ReportController::class, 'getAllMyRports']);
+            Route::post('/submit-report', [ReportController::class, 'submitReportForSupervsior']);
         });
 
 

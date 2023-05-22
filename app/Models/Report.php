@@ -9,11 +9,12 @@ class Report extends Model
 {
     use HasFactory;
 
-    const STATUS = ['pending', 'rejected', 'approved'];
+    const STATUS = ['pending', 'sent', 'rejected', 'approved'];
     const TYPE = ['keeps', 'tests'];
 
 
-    public function user () {
+    public function user()
+    {
         return $this->belongsTo(User::class, 'keeper_id', 'id');
     }
 }
