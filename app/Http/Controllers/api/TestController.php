@@ -44,6 +44,9 @@ class TestController extends Controller
             'updated_at' => Carbon::now(),
         ]);
 
+        $randomObjects['test_id'] = $test_id;
+
+
         $questions = [];
         for ($from; $from <= $to; ++$from) {
             if (!File::exists(storage_path('quran' . $from . '.json'))) {
@@ -59,8 +62,6 @@ class TestController extends Controller
                 }
             }
         }
-
-        $randomObjects = [];
 
         if ($request->query('ayahs_no') > count($questions))
             return response()->json([
