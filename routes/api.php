@@ -176,6 +176,8 @@ Route::prefix('auto')->middleware(['auth:sanctum', 'deleted-api'])->group(functi
                 Route::get('/mng/absence-attendace-days', [StudentManagementController::class, 'getMyAttendanceAndAbsencesDays']);
                 Route::get('/mng/keeps', [StudentManagementController::class, 'getStudentKeeps']);
                 Route::get('/mng/tests', [StudentManagementController::class, 'getStudentTests']);
+
+                Route::get('/mng/get-my-tests', [StudentManagementController::class, 'getTests']);
             });
         });
 

@@ -90,4 +90,13 @@ class StudentManagementController extends Controller
             'tests' => Test::where('student_id', $student_id)->with('keeper')->with('questions')->first(),
         ], Response::HTTP_OK);
     }
+
+    // Get all tests related to student
+    public function getTests()
+    {
+        $tests = Test::where('student_id', auth()->user()->id)->get();
+        return response()->json([
+            'tests' => $tests,
+        ], Response::HTTP_OK);
+    }
 }

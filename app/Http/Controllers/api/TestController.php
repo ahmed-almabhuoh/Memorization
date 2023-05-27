@@ -44,7 +44,7 @@ class TestController extends Controller
             'updated_at' => Carbon::now(),
         ]);
 
-        $randomObjects['test_id'] = $test_id;
+        // $randomObjects['test_id'] = $test_id;
 
 
         $questions = [];
